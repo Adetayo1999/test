@@ -2,7 +2,7 @@ import { BankAccountType, TransactionHistoryType } from "src/types/index";
 import { STORAGE_KEYS } from "../config/constants";
 
 export const getItem = (key: string) => {
-  return localStorage.getItem(key) || null;
+  return localStorage.getItem(key);
 };
 
 export const setItem = (key: string, value: any) => {
@@ -20,7 +20,7 @@ export const removeBankAccount = (accountNumber: string) => {
   if (bankAccountsINJSON) {
     const bankAccounts = JSON.parse(bankAccountsINJSON) as BankAccountType[];
     const updatedBankAccounts = bankAccounts.filter(
-      (account) => account.accountNumber === accountNumber
+      (account) => account.accountNumber !== accountNumber
     );
     setItem(STORAGE_KEYS.CLIENT_BANK_ACCOUNT_STORAGE_KEY, updatedBankAccounts);
   }
@@ -59,4 +59,29 @@ export const addTransaction = (transaction: TransactionHistoryType) => {
   }
   transactionHistory.push(transaction);
   setItem(STORAGE_KEYS.CLIENT_TRANSACTION_HISTORY_KEY, transactionHistory);
+};
+
+export const getBankAccounts = () => {
+  let bankAccounts = [] as BankAccountType[];
+  const bankAccountsINJSON = getItem(
+    STORAGE_KEYS.CLIENT_BANK_ACCOUNT_STORAGE_KEY
+  );
+  if (bankAccountsINJSON)
+    bankAccounts = JSON.parse(bankAccountsINJSON) as BankAccountType[];
+  return bankAccounts;
+};
+
+export const getTransactionHistory = () => {
+  let transactionHistory = [] as TransactionHistoryType[];
+  const transactionHistoryInJSON = getItem(
+    STORAGE_KEYS.CLIENT_TRANSACTION_HISTORY_KEY
+  );
+
+  if (transactionHistoryInJSON) {
+    transactionHistory = JSON.parse(
+      transactionHistoryInJSON
+    ) as TransactionHistoryType[];
+  }
+
+  return transactionHistory;
 };

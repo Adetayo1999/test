@@ -10,9 +10,6 @@ export default defineConfig({
     tsconfigPaths(),
     VitePWA({
       registerType: "prompt",
-      devOptions: {
-        enabled: true,
-      },
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
         name: "InPay NFC App",

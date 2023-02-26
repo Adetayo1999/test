@@ -52,7 +52,7 @@ function RequestPayment() {
           <div className="">
             <CustomInput
               name="account"
-              type="number"
+              type="text"
               labelText="Bank account"
               placeholder="Select bank account"
               isDark

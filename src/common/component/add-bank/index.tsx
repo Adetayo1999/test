@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { PlusIcon } from "@assets/icons";
-import { AddBankModal } from "@common/component/modals/add-bank";
 
-function AddBank() {
-  const [open, setOpen] = useState(false);
+type props = {
+  toggleModal(): void;
+};
 
+function AddBank({ toggleModal }: props) {
   return (
     <div className="">
       <h1 className="text-3xl mb-10">Hello,</h1>
@@ -16,15 +16,13 @@ function AddBank() {
       </p>
       <button
         className="flex justify-center items-center gap-x-2   border border-[#D0CCCC] rounded-md py-2 px-5"
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={toggleModal}
       >
         <span>
           <PlusIcon className="h-[2.3rem]  w-[2.3rem] dark:stroke-[#EDEDED] stroke-slate-800" />
         </span>
         <span>Add Bank</span>
       </button>
-
-      <AddBankModal isOpen={open} toggleOpen={() => setOpen((prev) => !prev)} />
     </div>
   );
 }

@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { PlusIcon } from "@assets/icons";
-import { Account } from "@common/component/account";
-import { History } from "@common/component/history";
 import { RxPlusCircled } from "react-icons/rx";
 import { currencyConverter } from "src/utils/currency-converter";
+import { BankAccountList } from "@common/component/bank-account-list";
+import { TransactionHistoryList } from "@common/component/transaction-history-list";
 
-function TransactionHistory() {
+type props = {
+  toggleModal(): void;
+};
+
+function TransactionHistory({ toggleModal }: props) {
   const [active, setActive] = useState<"account" | "history">("account");
 
   return (
@@ -18,7 +21,10 @@ function TransactionHistory() {
           <h3 className="text-2xl">{currencyConverter("en-NG", "NGN", 0)}</h3>
         </div>
         <div className="">
-          <button className="flex items-center justify-center gap-x-2   border border-[#D0CCCC] rounded-sm px-3 py-1">
+          <button
+            className="flex items-center justify-center gap-x-2   border border-[#D0CCCC] rounded-sm px-3 py-1"
+            onClick={toggleModal}
+          >
             <span>
               <RxPlusCircled className="h-[2rem]  w-[2rem] dark:text-[#EDEDED] text-slate-800" />
             </span>
@@ -50,35 +56,8 @@ function TransactionHistory() {
             History
           </button>
         </div>
-
-        {active === "history" && (
-          <div className="flex flex-col gap-y-5">
-            {new Array(100).fill("account").map((_, idx) => (
-              <History
-                key={idx}
-                accountName="Avis Charles A"
-                accountNumber="0226660175"
-                amount={140.199}
-                bankName="GTB"
-                transactionDate="12:35 24 Jan"
-                transactionType="Credit"
-              />
-            ))}
-          </div>
-        )}
-
-        {active === "account" && (
-          <div className="flex flex-col gap-y-5">
-            {new Array(100).fill("account").map((_, idx) => (
-              <Account
-                key={idx}
-                accountName="Charles Avis Ayodeji"
-                accountNumber="0226660175"
-                bank="GT Bank Plc"
-              />
-            ))}
-          </div>
-        )}
+        {active === "history" && <TransactionHistoryList />}
+        {active === "account" && <BankAccountList />}
       </div>
     </div>
   );
