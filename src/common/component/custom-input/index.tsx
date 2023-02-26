@@ -4,6 +4,8 @@ type props = {
   placeholder?: string;
   name: string;
   isDark?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const CustomInput = ({
@@ -12,6 +14,8 @@ export const CustomInput = ({
   placeholder,
   name,
   isDark,
+  onChange,
+  value,
 }: props) => {
   return (
     <div>
@@ -25,7 +29,9 @@ export const CustomInput = ({
       )}
       <input
         type={type}
+        value={value}
         name={name}
+        onChange={onChange}
         className={`w-full p-2.5 placeholder:text-gray-500  border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 ${
           isDark ? "text-white bg-black" : "text-black"
         } `}
