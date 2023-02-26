@@ -8,3 +8,20 @@ export interface ModalProps {
   isOpen: boolean;
   toggleOpen(): void;
 }
+
+export interface BankAccountType {
+  id: number;
+  accountName: string;
+  accountNumber: string;
+  bank: string;
+}
+
+export interface TransactionHistoryType {
+  id: number;
+  transactionType: "Credit" | "Debit";
+  bankName: string;
+  accountName: string;
+  amount: number;
+  transactionDate: string;
+  accountNumber: string;
+}
