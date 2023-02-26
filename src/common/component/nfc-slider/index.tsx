@@ -44,6 +44,7 @@ export const NFCSlider = () => {
         <ul className="flex gap-x-2">
           {new Array(NFC_CARDS.length).fill("active").map((_, idx) => (
             <li
+              key={idx}
               className={`${
                 idx === counter ? "bg-[#1B1711]" : "bg-[#D9D9D9]"
               } rounded-sm h-[0.25rem] w-[1rem]`}

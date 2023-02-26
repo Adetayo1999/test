@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { HiArrowUpRight } from "react-icons/hi2";
+import toast from "react-hot-toast";
 import { Modal } from "..";
 import { CustomInput } from "@common/component/custom-input";
 import { CustomSelect } from "@common/component/custom-select";
 import { CustomButton } from "@common/component/custom-button";
 import { ModalProps } from "src/types/index";
+import { addBankAccount } from "@common/service/storage";
 
 const currencies = [
   {
@@ -28,6 +31,48 @@ const banks = [
 ];
 
 export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
+  const [selectedCurrency, setSelectedCurrency] = useState("");
+  const [selectedBank, setSelectedBank] = useState("");
+  const [accountNumber, setAccoutNumber] = useState("");
+  const [accountName, setAccountName] = useState("");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      ![accountName, accountNumber, selectedCurrency, selectedBank].every(
+        (input) => Boolean(input)
+      )
+    ) {
+      toast.error("All Fields Are Required");
+      return;
+    }
+
+    if (accountNumber.length !== 10) {
+      toast.error("Account Number Must Be 10 digits");
+      return;
+    }
+
+    try {
+      addBankAccount({
+        accountName,
+        accountNumber,
+        bank: selectedBank,
+        currency: selectedCurrency,
+      });
+      toast.success("Bank Account Added 🎉");
+      setAccoutNumber("");
+      setSelectedBank("");
+      setAccountName("");
+      setSelectedCurrency("");
+      toggleOpen();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} toggleOpen={toggleOpen}>
       <div className="flex flex-col justify-center items-center">
@@ -44,18 +89,32 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
               Add the account where all your payment will be paid into.
             </p>
           </div>
-          <form className="flex gap-y-3 flex-col">
-            <CustomSelect defaultValue="Currency" options={currencies} />
-            <CustomSelect options={banks} />
+          <form className="flex gap-y-3 flex-col" onSubmit={handleSubmit}>
+            <CustomSelect
+              defaultValue="Currency"
+              options={currencies}
+              onChange={(e) => setSelectedCurrency(e.target.value)}
+              value={selectedCurrency}
+            />
+            <CustomSelect
+              options={banks}
+              defaultValue="Select a bank"
+              onChange={(e) => setSelectedBank(e.target.value)}
+              value={selectedBank}
+            />
             <CustomInput
               name="account-number"
               type="text"
               placeholder="Account number"
+              value={accountNumber}
+              onChange={(e) => setAccoutNumber(e.target.value)}
             />
             <CustomInput
               name="account-name"
               type="text"
               placeholder="Account name"
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
             />
             <CustomButton buttonText="Save & Continue" isDark />
           </form>

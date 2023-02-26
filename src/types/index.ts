@@ -10,14 +10,13 @@ export interface ModalProps {
 }
 
 export interface BankAccountType {
-  id: number;
   accountName: string;
   accountNumber: string;
   bank: string;
+  currency: string;
 }
 
 export interface TransactionHistoryType {
-  id: number;
   transactionType: "Credit" | "Debit";
   bankName: string;
   accountName: string;

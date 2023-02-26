@@ -37,10 +37,13 @@ export const addBankAccount = (bankDetails: BankAccountType) => {
   const bankAcountExists = bankAccounts.find(
     (account) => account.accountNumber === bankDetails.accountNumber
   );
-  if (!bankAcountExists) {
-    bankAccounts.push(bankDetails);
-    setItem(STORAGE_KEYS.CLIENT_BANK_ACCOUNT_STORAGE_KEY, bankAccounts);
+
+  if (bankAcountExists) {
+    throw new Error("Bank Account Exists");
   }
+
+  bankAccounts.push(bankDetails);
+  setItem(STORAGE_KEYS.CLIENT_BANK_ACCOUNT_STORAGE_KEY, bankAccounts);
 };
 
 export const addTransaction = (transaction: TransactionHistoryType) => {
