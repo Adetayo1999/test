@@ -5,6 +5,7 @@ type props = {
   options: { value: string; text: string }[];
   onChange?(e: React.ChangeEvent<HTMLSelectElement>): void;
   value?: string;
+  isDark?: boolean;
 };
 
 export const CustomSelect = ({
@@ -12,11 +13,14 @@ export const CustomSelect = ({
   defaultValue,
   onChange,
   value,
+  isDark,
 }: props) => {
   return (
     <div className="relative w-full lg:max-w-sm">
       <select
-        className="w-full p-2.5 text-black  border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 cursor-pointer"
+        className={`w-full p-2.5 text-black  border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 cursor-pointer ${
+          isDark ? "text-white bg-black" : "text-black"
+        }`}
         onChange={onChange}
         value={value}
       >

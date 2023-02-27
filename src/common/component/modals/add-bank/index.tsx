@@ -22,11 +22,11 @@ const currencies = [
 const banks = [
   {
     text: "GT Bank",
-    value: "gtb",
+    value: "GT Bank",
   },
   {
     text: "First Bank Plc",
-    value: "first-bank",
+    value: "First Bank Plc",
   },
 ];
 

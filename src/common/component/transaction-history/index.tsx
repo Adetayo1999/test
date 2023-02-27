@@ -3,6 +3,7 @@ import { RxPlusCircled } from "react-icons/rx";
 import { currencyConverter } from "src/utils/currency-converter";
 import { BankAccountList } from "@common/component/bank-account-list";
 import { TransactionHistoryList } from "@common/component/transaction-history-list";
+import { getTransactionHistory } from "@common/service/storage";
 
 type props = {
   toggleModal(): void;
@@ -11,6 +12,12 @@ type props = {
 function TransactionHistory({ toggleModal }: props) {
   const [active, setActive] = useState<"account" | "history">("account");
 
+  const totalReceived =
+    getTransactionHistory().reduce(
+      (initialAmount, { amount }) => initialAmount + amount,
+      0
+    ) || 0;
+
   return (
     <div className="">
       <div className="flex justify-between items-center mb-9">
@@ -18,7 +25,9 @@ function TransactionHistory({ toggleModal }: props) {
           <p className="dark:text-slate-300 mb-1 text-slate-800 text-sm">
             Total Received
           </p>
-          <h3 className="text-2xl">{currencyConverter("en-NG", "NGN", 0)}</h3>
+          <h3 className="text-2xl">
+            {currencyConverter("en-NG", "NGN", totalReceived)}
+          </h3>
         </div>
         <div className="">
           <button

@@ -1,6 +1,8 @@
 import { CustomButton } from "@common/component/custom-button";
 import { CustomInput } from "@common/component/custom-input";
+import { CustomSelect } from "@common/component/custom-select";
 import { CustomTextArea } from "@common/component/custom-textarea";
+import { getBankAccounts } from "@common/service/storage";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
@@ -50,12 +52,15 @@ function RequestPayment() {
             </div>
           </div>
           <div className="">
-            <CustomInput
-              name="account"
-              type="text"
-              labelText="Bank account"
-              placeholder="Select bank account"
+            <CustomSelect
               isDark
+              defaultValue="Select bank account"
+              options={getBankAccounts().map(
+                ({ accountNumber, bank, accountName }) => ({
+                  value: `${accountNumber}  ${bank}  ${accountName}`,
+                  text: `${accountNumber}  ${bank}  ${accountName}`,
+                })
+              )}
             />
             <p className="mt-2 text-sm">
               Haven&apos;t added Bank details?{" "}
