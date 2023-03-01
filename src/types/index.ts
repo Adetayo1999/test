@@ -14,6 +14,7 @@ export interface BankAccountType {
   accountNumber: string;
   bank: string;
   currency: string;
+  bankCode: string;
 }
 
 export interface TransactionHistoryType {
@@ -23,4 +24,9 @@ export interface TransactionHistoryType {
   amount: number;
   transactionDate: string;
   accountNumber: string;
+}
+
+export interface BankType {
+  bank_name: string;
+  code: string;
 }

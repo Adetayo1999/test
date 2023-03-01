@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiArrowUpRight } from "react-icons/hi2";
 import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 import { Modal } from "..";
 import { CustomInput } from "@common/component/custom-input";
 import { CustomSelect } from "@common/component/custom-select";
 import { CustomButton } from "@common/component/custom-button";
-import { ModalProps } from "src/types/index";
+import { BankType, ModalProps } from "src/types/index";
 import { addBankAccount } from "@common/service/storage";
+import { getAllBanks } from "@common/service/api";
 
 const currencies = [
   {
@@ -19,22 +21,25 @@ const currencies = [
   },
 ];
 
-const banks = [
-  {
-    text: "GT Bank",
-    value: "GT Bank",
-  },
-  {
-    text: "First Bank Plc",
-    value: "First Bank Plc",
-  },
-];
+// const banks = [
+//   {
+//     text: "GT Bank",
+//     value: "GT Bank",
+//   },
+//   {
+//     text: "First Bank Plc",
+//     value: "First Bank Plc",
+//   },
+// ];
 
 export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
   const [selectedCurrency, setSelectedCurrency] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
   const [accountNumber, setAccoutNumber] = useState("");
   const [accountName, setAccountName] = useState("");
+  const [banks, setBanks] = useState<BankType[]>([]);
+  const [loadingBanks, setBanksLoading] = useState(false);
+  const [, setBanksError] = useState<null | string>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,10 +59,12 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
     }
 
     try {
+      const [bank, bankCode] = selectedBank.split("%");
       addBankAccount({
         accountName,
         accountNumber,
-        bank: selectedBank,
+        bank,
+        bankCode,
         currency: selectedCurrency,
       });
       toast.success("Bank Account Added 🎉");
@@ -72,6 +79,24 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
       }
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setBanksLoading(true);
+        const { data } = await getAllBanks();
+        setBanks(data?.data || []);
+      } catch (error) {
+        let message = "Unknown Error";
+        if (error instanceof AxiosError) {
+          message = error.response?.data?.message || "Unknown Error";
+        } else if (error instanceof Error) message = error.message;
+        setBanksError(message);
+      } finally {
+        setBanksLoading(false);
+      }
+    })();
+  }, []);
 
   return (
     <Modal isOpen={isOpen} toggleOpen={toggleOpen}>
@@ -90,18 +115,27 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
             </p>
           </div>
           <form className="flex gap-y-3 flex-col" onSubmit={handleSubmit}>
-            <CustomSelect
-              defaultValue="Currency"
-              options={currencies}
-              onChange={(e) => setSelectedCurrency(e.target.value)}
-              value={selectedCurrency}
-            />
-            <CustomSelect
-              options={banks}
-              defaultValue="Select a bank"
-              onChange={(e) => setSelectedBank(e.target.value)}
-              value={selectedBank}
-            />
+            <CustomSelect onChange={(e) => setSelectedCurrency(e.target.value)}>
+              <option value="">Currency</option>
+              {currencies.map((currency) => (
+                <option value={currency.value} key={currency.value}>
+                  {currency.text}
+                </option>
+              ))}
+            </CustomSelect>
+            <CustomSelect onChange={(e) => setSelectedBank(e.target.value)}>
+              <option value="">
+                {loadingBanks ? "Loading..." : "Select a bank"}
+              </option>
+              {banks.map((bank) => (
+                <option
+                  key={`${bank.code}-${bank.bank_name}`}
+                  value={`${bank.bank_name}%${bank.code}`}
+                >
+                  {bank.bank_name}
+                </option>
+              ))}
+            </CustomSelect>
             <CustomInput
               name="account-number"
               type="text"
