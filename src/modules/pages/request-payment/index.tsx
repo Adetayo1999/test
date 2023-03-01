@@ -1,12 +1,48 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CustomButton } from "@common/component/custom-button";
-import { CustomInput } from "@common/component/custom-input";
 import { CustomSelect } from "@common/component/custom-select";
 import { CustomTextArea } from "@common/component/custom-textarea";
-import { getBankAccounts } from "@common/service/storage";
+import { getBankAccounts, getNFCToken } from "@common/service/storage";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { initializeNFCTransaction } from "@common/service/api";
+import { toast } from "react-hot-toast";
+import SuspsenseFallBack from "@common/component/Suspensefallback";
 
 function RequestPayment() {
+  const [loading, setLoading] = useState(false);
+  const [txRef, setTxRef] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const initializeTransaction = async () => {
+      const token = getNFCToken();
+      if (!token) {
+        toast.error("Error: Restart the connection Process");
+        return navigate("/");
+      }
+      try {
+        setLoading(true);
+        const { data } = await initializeNFCTransaction({ token });
+        setTxRef(data?.data?.reference || "");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    initializeTransaction();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[50vh] flex justify-center items-center">
+        <SuspsenseFallBack />
+      </div>
+    );
+  }
+
   return (
     <div className="">
       <div className="mb-8">
@@ -52,16 +88,18 @@ function RequestPayment() {
             </div>
           </div>
           <div className="">
-            <CustomSelect
-              isDark
-              defaultValue="Select bank account"
-              options={getBankAccounts().map(
-                ({ accountNumber, bank, accountName }) => ({
-                  value: `${accountNumber}  ${bank}  ${accountName}`,
-                  text: `${accountNumber}  ${bank}  ${accountName}`,
-                })
-              )}
-            />
+            <CustomSelect isDark>
+              <option value="">Select bank account</option>
+              {getBankAccounts().map(({ accountName, accountNumber, bank }) => (
+                <option
+                  key={`${accountNumber}`}
+                  value={`${accountNumber}  ${bank}  ${accountName}`}
+                >
+                  {`${accountNumber}  ${bank}  ${accountName}`}
+                </option>
+              ))}
+            </CustomSelect>
+
             <p className="mt-2 text-sm">
               Haven&apos;t added Bank details?{" "}
               <Link className="font-bold" to="/">

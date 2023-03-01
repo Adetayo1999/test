@@ -85,3 +85,11 @@ export const getTransactionHistory = () => {
 
   return transactionHistory;
 };
+
+export const getNFCToken = () => {
+  return sessionStorage.getItem(STORAGE_KEYS.CLIENT_NFC_TOKEN);
+};
+
+export const setNFCToken = (token: string) => {
+  sessionStorage.setItem(STORAGE_KEYS.CLIENT_NFC_TOKEN, token);
+};
