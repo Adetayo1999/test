@@ -30,3 +30,32 @@ export interface BankType {
   bank_name: string;
   code: string;
 }
+
+export interface FiatType {
+  _id: string;
+  country: string;
+  country_currency: string;
+}
+
+export interface StoreType {
+  banks: {
+    loading: boolean;
+    data: BankType[];
+  };
+  fiats: {
+    loading: boolean;
+    data: FiatType[];
+  };
+}
+
+export interface ActionType {
+  type: string;
+  payload?: any;
+}
+
+export type DispatchType = React.Dispatch<ActionType>;
+
+export interface ContextType {
+  state: StoreType;
+  dispatch: DispatchType;
+}

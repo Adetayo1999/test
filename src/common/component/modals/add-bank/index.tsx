@@ -1,45 +1,30 @@
 import { useState, useEffect } from "react";
 import { HiArrowUpRight } from "react-icons/hi2";
-import toast from "react-hot-toast";
-import { AxiosError } from "axios";
 import { Modal } from "..";
 import { CustomInput } from "@common/component/custom-input";
 import { CustomSelect } from "@common/component/custom-select";
 import { CustomButton } from "@common/component/custom-button";
-import { BankType, ModalProps } from "src/types/index";
-import { addBankAccount } from "@common/service/storage";
-import { getAllBanks } from "@common/service/api";
-
-const currencies = [
-  {
-    text: "Naira",
-    value: "naira",
-  },
-  {
-    text: "Dollar",
-    value: "dollar",
-  },
-];
-
-// const banks = [
-//   {
-//     text: "GT Bank",
-//     value: "GT Bank",
-//   },
-//   {
-//     text: "First Bank Plc",
-//     value: "First Bank Plc",
-//   },
-// ];
+import { ModalProps } from "src/types/index";
+import { addBankAccount, getBankAccounts } from "@common/service/storage";
+import { errorFormatter } from "src/utils/error-formatter";
+import service from "@common/service/requests";
+import { useStore } from "@common/context";
+import { customToast } from "src/utils/custom-toast";
+import { verifyAccountAPI } from "@common/service/api";
 
 export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
+  const {
+    dispatch,
+    state: {
+      banks: { data: banks, loading: loadingBanks },
+      fiats: { data: fiats, loading: loadingFiats },
+    },
+  } = useStore();
+
   const [selectedCurrency, setSelectedCurrency] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
   const [accountNumber, setAccoutNumber] = useState("");
-  const [accountName, setAccountName] = useState("");
-  const [banks, setBanks] = useState<BankType[]>([]);
-  const [loadingBanks, setBanksLoading] = useState(false);
-  const [, setBanksError] = useState<null | string>(null);
+  const [accountName, setAccountName] = useState("Omotomiwa Adetayo");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,13 +34,18 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
         (input) => Boolean(input)
       )
     ) {
-      toast.error("All Fields Are Required");
-      return;
+      return customToast("All Fields Are Required", "error");
     }
 
     if (accountNumber.length !== 10) {
-      toast.error("Account Number Must Be 10 digits");
-      return;
+      return customToast("Account Number Must Be 10 digits", "error");
+    }
+
+    if (getBankAccounts().length === 10) {
+      return customToast(
+        "Max of 10 accounts exceeded, delete one to continue",
+        "error"
+      );
     }
 
     try {
@@ -67,36 +57,51 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
         bankCode,
         currency: selectedCurrency,
       });
-      toast.success("Bank Account Added 🎉");
+      customToast("Bank Account Added 🎉", "success");
       setAccoutNumber("");
       setSelectedBank("");
       setAccountName("");
       setSelectedCurrency("");
       toggleOpen();
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      const message = errorFormatter(error);
+      customToast(message, "error");
     }
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        setBanksLoading(true);
-        const { data } = await getAllBanks();
-        setBanks(data?.data || []);
-      } catch (error) {
-        let message = "Unknown Error";
-        if (error instanceof AxiosError) {
-          message = error.response?.data?.message || "Unknown Error";
-        } else if (error instanceof Error) message = error.message;
-        setBanksError(message);
-      } finally {
-        setBanksLoading(false);
-      }
-    })();
-  }, []);
+    if (banks.length === 0) {
+      service.getBanks(dispatch);
+    }
+  }, [dispatch, banks]);
+
+  useEffect(() => {
+    if (fiats.length === 0) {
+      service.getFiats(dispatch);
+    }
+  }, [fiats]);
+
+  useEffect(() => {
+    if (
+      selectedCurrency &&
+      selectedBank &&
+      accountNumber &&
+      accountNumber.length === 10
+    ) {
+      // const [, country] = selectedCurrency.split("%");
+      // const [, bank_code] = selectedBank.split("%");
+      //  const verifyAccount = async () => {
+      //     try{
+      //      const { data } = await verifyAccountAPI({ account_number: accountNumber, bank_code, country })
+      //      setAccountName(data?.data?.);
+      //     }
+      //     catch(error){
+      //        const message = errorFormatter(error);
+      //        customToast(message, "error");
+      //     }
+      //  }
+    }
+  }, [selectedCurrency, selectedBank, accountNumber]);
 
   return (
     <Modal isOpen={isOpen} toggleOpen={toggleOpen}>
@@ -115,15 +120,26 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
             </p>
           </div>
           <form className="flex gap-y-3 flex-col" onSubmit={handleSubmit}>
-            <CustomSelect onChange={(e) => setSelectedCurrency(e.target.value)}>
-              <option value="">Currency</option>
-              {currencies.map((currency) => (
-                <option value={currency.value} key={currency.value}>
-                  {currency.text}
+            <CustomSelect
+              onChange={(e) => setSelectedCurrency(e.target.value)}
+              value={selectedCurrency}
+            >
+              <option value="">
+                {loadingFiats ? "Loading..." : "Select a currency"}
+              </option>
+              {fiats.map((fiat) => (
+                <option
+                  value={`${fiat._id}%${fiat.country}%${fiat.country_currency}`}
+                  key={fiat._id}
+                >
+                  {fiat.country_currency}
                 </option>
               ))}
             </CustomSelect>
-            <CustomSelect onChange={(e) => setSelectedBank(e.target.value)}>
+            <CustomSelect
+              onChange={(e) => setSelectedBank(e.target.value)}
+              value={selectedBank}
+            >
               <option value="">
                 {loadingBanks ? "Loading..." : "Select a bank"}
               </option>
@@ -147,8 +163,8 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
               name="account-name"
               type="text"
               placeholder="Account name"
-              value={accountName}
-              onChange={(e) => setAccountName(e.target.value)}
+              defaultValue={accountName}
+              disabled
             />
             <CustomButton buttonText="Save & Continue" isDark />
           </form>

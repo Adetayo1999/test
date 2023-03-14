@@ -4,6 +4,8 @@ import { currencyConverter } from "src/utils/currency-converter";
 import { BankAccountList } from "@common/component/bank-account-list";
 import { TransactionHistoryList } from "@common/component/transaction-history-list";
 import { getTransactionHistory } from "@common/service/storage";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "@common/routes/paths";
 
 type props = {
   toggleModal(): void;
@@ -11,6 +13,9 @@ type props = {
 
 function TransactionHistory({ toggleModal }: props) {
   const [active, setActive] = useState<"account" | "history">("account");
+  const navigate = useNavigate();
+
+  const goToRequestPayment = () => navigate(PATHS.request_payment);
 
   const totalReceived =
     getTransactionHistory().reduce(
@@ -29,7 +34,13 @@ function TransactionHistory({ toggleModal }: props) {
             {currencyConverter("en-NG", "NGN", totalReceived)}
           </h3>
         </div>
-        <div className="">
+        <div className="flex gap-x-5">
+          <button
+            className="flex items-center justify-center gap-x-2 bg-white   text-slate-800  rounded-sm px-3 py-1 text-sm font-semibold"
+            onClick={goToRequestPayment}
+          >
+            Request Payment
+          </button>
           <button
             className="flex items-center justify-center gap-x-2   border border-[#D0CCCC] rounded-sm px-3 py-1"
             onClick={toggleModal}
