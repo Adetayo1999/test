@@ -6,7 +6,7 @@ import { CustomTextArea } from "@common/component/custom-textarea";
 import { getBankAccounts, getNFCToken } from "@common/service/storage";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { getConversion, initializeNFCTransaction } from "@common/service/api";
+import { initializeNFCTransaction } from "@common/service/api";
 import SuspsenseFallBack from "@common/component/Suspensefallback";
 import { errorFormatter } from "src/utils/error-formatter";
 import { useStore } from "@common/context";

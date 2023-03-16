@@ -34,6 +34,15 @@ const reducer = (state = initialState, action: ActionType): StoreType => {
         },
       };
 
+    case ACTION_TYPES.FETCH_BANKS_FAILURE:
+      return {
+        ...state,
+        banks: {
+          ...state.banks,
+          loading: false,
+        },
+      };
+
     case ACTION_TYPES.FETCH_FIATS:
       return {
         ...state,
@@ -49,6 +58,15 @@ const reducer = (state = initialState, action: ActionType): StoreType => {
         fiats: {
           ...state.fiats,
           data: action.payload,
+          loading: false,
+        },
+      };
+
+    case ACTION_TYPES.FETCH_FIATS_FAILURE:
+      return {
+        ...state,
+        fiats: {
+          ...state.fiats,
           loading: false,
         },
       };
