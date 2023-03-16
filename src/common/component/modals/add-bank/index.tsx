@@ -24,7 +24,8 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
   const [selectedCurrency, setSelectedCurrency] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
   const [accountNumber, setAccoutNumber] = useState("");
-  const [accountName, setAccountName] = useState("Omotomiwa Adetayo");
+  const [accountName, setAccountName] = useState("");
+  const [loadingVerifyAccount, setLoadingVerifyAccount] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -88,18 +89,26 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
       accountNumber &&
       accountNumber.length === 10
     ) {
-      // const [, country] = selectedCurrency.split("%");
-      // const [, bank_code] = selectedBank.split("%");
-      //  const verifyAccount = async () => {
-      //     try{
-      //      const { data } = await verifyAccountAPI({ account_number: accountNumber, bank_code, country })
-      //      setAccountName(data?.data?.);
-      //     }
-      //     catch(error){
-      //        const message = errorFormatter(error);
-      //        customToast(message, "error");
-      //     }
-      //  }
+      const [, country] = selectedCurrency.split("%");
+      const [, bank_code] = selectedBank.split("%");
+      const verifyAccount = async () => {
+        setLoadingVerifyAccount(true);
+        try {
+          const { data } = await verifyAccountAPI({
+            account_number: accountNumber,
+            bank_code,
+            country,
+          });
+          console.log(data?.data?.account_name, "here");
+          setAccountName(data?.data?.account_name);
+        } catch (error) {
+          const message = errorFormatter(error);
+          customToast(message, "error");
+        } finally {
+          setLoadingVerifyAccount(false);
+        }
+      };
+      verifyAccount();
     }
   }, [selectedCurrency, selectedBank, accountNumber]);
 
@@ -163,10 +172,15 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
               name="account-name"
               type="text"
               placeholder="Account name"
-              defaultValue={accountName}
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
               disabled
             />
-            <CustomButton buttonText="Save & Continue" isDark />
+            <CustomButton
+              buttonText="Save & Continue"
+              isDark
+              loading={loadingVerifyAccount}
+            />
           </form>
         </div>
       </div>

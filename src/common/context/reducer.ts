@@ -14,7 +14,6 @@ export const initialState: StoreType = {
 };
 
 const reducer = (state = initialState, action: ActionType): StoreType => {
-  console.log(action);
   switch (action.type) {
     case ACTION_TYPES.FETCH_BANKS:
       return {
