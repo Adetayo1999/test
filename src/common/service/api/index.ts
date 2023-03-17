@@ -1,4 +1,5 @@
 import { instance } from "@common/service/config/axios-instance";
+import { RequestNFCTransactionType } from "../../../types/index";
 
 export const getAllBanks = async () => {
   return instance.get("/api/v1/no-auth/payment/banks");
@@ -25,4 +26,8 @@ export const verifyAccountAPI = (data: {
   account_number: string;
 }) => {
   return instance.post("/api/v1/no-auth/payment/account/verify", data);
+};
+
+export const requestNFCTransaction = (data: RequestNFCTransactionType) => {
+  return instance.post("/api/v1/no-auth/payment/nfc", data);
 };

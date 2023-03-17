@@ -8,7 +8,7 @@ import { ModalProps } from "src/types/index";
 import { addBankAccount, getBankAccounts } from "@common/service/storage";
 import { errorFormatter } from "src/utils/error-formatter";
 import service from "@common/service/requests";
-import { useStore } from "@common/context";
+import { useStore } from "@common/context/store";
 import { customToast } from "src/utils/custom-toast";
 import { verifyAccountAPI } from "@common/service/api";
 

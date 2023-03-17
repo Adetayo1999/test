@@ -1,3 +1,5 @@
+import { Socket } from "socket.io-client";
+
 export interface GenerateRoute {
   Component: React.LazyExoticComponent<React.ComponentType<any>>;
   path: string;
@@ -58,4 +60,23 @@ export type DispatchType = React.Dispatch<ActionType>;
 export interface ContextType {
   state: StoreType;
   dispatch: DispatchType;
+}
+
+export interface SocketContextType {
+  socketConnected: boolean;
+  socket: Socket;
+  handleTxRef(txRef: string): void;
+}
+
+export interface RequestNFCTransactionType {
+  amount: number;
+  conversion_id: string;
+  asset_id: string;
+  txn_reference: string;
+  bank_data: {
+    account_number: string;
+    bank_name: string;
+    account_name: string;
+    bank_code: string;
+  };
 }

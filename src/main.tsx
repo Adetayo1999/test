@@ -5,16 +5,19 @@ import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "react-hot-toast";
 import App from "./App";
 import "./index.css";
-import StoreProvider from "@common/context";
+import StoreProvider from "@common/context/store";
+import SocketProvider from "@common/context/socket-context";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-  <StoreProvider>
-    <Router>
-      <Toaster position="top-right" />
-      <App />
-      <ToastContainer />
-    </Router>
-  </StoreProvider>
+  <SocketProvider>
+    <StoreProvider>
+      <Router>
+        <Toaster position="top-right" />
+        <App />
+        <ToastContainer />
+      </Router>
+    </StoreProvider>
+  </SocketProvider>
   // </React.StrictMode>
 );

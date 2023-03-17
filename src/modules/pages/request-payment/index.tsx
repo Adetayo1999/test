@@ -6,12 +6,17 @@ import { CustomTextArea } from "@common/component/custom-textarea";
 import { getBankAccounts, getNFCToken } from "@common/service/storage";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { getConversion, initializeNFCTransaction } from "@common/service/api";
+import {
+  getConversion,
+  initializeNFCTransaction,
+  requestNFCTransaction,
+} from "@common/service/api";
 import { errorFormatter } from "src/utils/error-formatter";
-import { useStore } from "@common/context";
+import { useStore } from "@common/context/store";
 import service from "@common/service/requests";
 import { customToast } from "src/utils/custom-toast";
 import { PATHS } from "@common/routes/paths";
+import { useSocket } from "@common/context/socket-context";
 
 function RequestPayment() {
   const [amount, setAmount] = useState("");
@@ -19,6 +24,8 @@ function RequestPayment() {
   const [description, setDescription] = useState("");
   const [accountDetails, setAccountDetails] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { socket, socketConnected } = useSocket();
 
   const {
     state: {
@@ -78,9 +85,15 @@ function RequestPayment() {
       data.txn_reference = txn_reference;
       data.conversion_id = conversion_id;
 
-      /** API Payment Request ???? */
+      const { data: txRequestResponse } = await requestNFCTransaction(data);
 
-      console.log(data);
+      customToast("Payment Requested", "success");
+
+      if (socketConnected) {
+        socket.emit("customer:join", {
+          txn_reference: txRequestResponse?.data?.txn_reference,
+        });
+      }
     } catch (error) {
       const message = errorFormatter(error);
       customToast(message, "error");
@@ -195,6 +208,8 @@ function RequestPayment() {
           <CustomButton buttonText="Continue" loading={loading} />
         </form>
       </div>
+
+      {/* <PaymentProcessingModal isOpen toggleOpen={() => {}} /> */}
     </div>
   );
 }
