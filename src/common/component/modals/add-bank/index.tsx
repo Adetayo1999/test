@@ -99,7 +99,6 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
             bank_code,
             country,
           });
-          console.log(data?.data?.account_name, "here");
           setAccountName(data?.data?.account_name);
         } catch (error) {
           const message = errorFormatter(error);

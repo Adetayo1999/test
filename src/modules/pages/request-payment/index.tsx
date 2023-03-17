@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Navigate } from "react-router-dom";
 import { CustomButton } from "@common/component/custom-button";
 import { CustomSelect } from "@common/component/custom-select";
@@ -6,8 +6,7 @@ import { CustomTextArea } from "@common/component/custom-textarea";
 import { getBankAccounts, getNFCToken } from "@common/service/storage";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { initializeNFCTransaction } from "@common/service/api";
-import SuspsenseFallBack from "@common/component/Suspensefallback";
+import { getConversion, initializeNFCTransaction } from "@common/service/api";
 import { errorFormatter } from "src/utils/error-formatter";
 import { useStore } from "@common/context";
 import service from "@common/service/requests";
@@ -20,7 +19,6 @@ function RequestPayment() {
   const [description, setDescription] = useState("");
   const [accountDetails, setAccountDetails] = useState("");
   const [loading, setLoading] = useState(false);
-  const [txn_reference, setTxnRef] = useState("");
 
   const {
     state: {
@@ -35,24 +33,12 @@ function RequestPayment() {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    const initializeTransaction = async () => {
-      if (getNFCToken()) {
-        try {
-          setLoading(true);
-          const { data } = await initializeNFCTransaction({
-            token: getNFCToken()!,
-          });
-          setTxnRef(data?.data?.reference || "");
-        } catch (error) {
-          const message = errorFormatter(error);
-          customToast(message, "error");
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-    initializeTransaction();
+  const initializeTransaction = useCallback(async () => {
+    const { data } = await initializeNFCTransaction({
+      token: getNFCToken()!,
+    });
+
+    return data?.data?.reference;
   }, []);
 
   const handlePaymentRequest = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,14 +49,14 @@ function RequestPayment() {
       return;
     }
 
-    const [asset_id] = currency.split("%");
+    const [asset_id, currencySymbol] = currency.split("%");
     const [account_number, bank_name, account_name, bank_code] =
       accountDetails.split("%");
 
     const data = {
       amount: +amount,
       asset_id,
-      txn_reference,
+      txn_reference: "",
       conversion_id: "",
       bank_data: {
         account_number,
@@ -80,25 +66,28 @@ function RequestPayment() {
       },
     };
 
-    console.log(data);
+    try {
+      setLoading(true);
+      const txn_reference = await initializeTransaction();
+      const { data: conversionData } = await getConversion({
+        amount,
+        from: currencySymbol,
+      });
+      const conversion_id = conversionData?.data?._id;
 
-    // try {
-    //   const { data } = await getConversion({ amount, from: currency });
-    //   const convertedAmount = data?.data?.rate_markdown_deprox * +amount;
-    //   console.log(convertedAmount);
-    // } catch (error) {
-    //   const message = errorFormatter(error);
-    //   customToast(message, "error");
-    // }
+      data.txn_reference = txn_reference;
+      data.conversion_id = conversion_id;
+
+      /** API Payment Request ???? */
+
+      console.log(data);
+    } catch (error) {
+      const message = errorFormatter(error);
+      customToast(message, "error");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  if (loading) {
-    return (
-      <div className="h-[50vh] flex justify-center items-center">
-        <SuspsenseFallBack />
-      </div>
-    );
-  }
 
   if (!getNFCToken()) {
     customToast("Error: Restart the connection Process", "error");
@@ -182,7 +171,7 @@ function RequestPayment() {
                     key={`${accountNumber}`}
                     value={`${accountNumber}%${bank}%${accountName}%${bankCode}`}
                   >
-                    {`${accountNumber}  ${bank}  ${accountName}`}
+                    {`${accountNumber}`}
                   </option>
                 )
               )}
@@ -203,7 +192,7 @@ function RequestPayment() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <CustomButton buttonText="Continue" />
+          <CustomButton buttonText="Continue" loading={loading} />
         </form>
       </div>
     </div>
