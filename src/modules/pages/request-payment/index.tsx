@@ -25,7 +25,7 @@ function RequestPayment() {
   const [accountDetails, setAccountDetails] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { socket, socketConnected } = useSocket();
+  const { socket, socketConnected, handleTxRef } = useSocket();
 
   const {
     state: {
@@ -75,11 +75,18 @@ function RequestPayment() {
 
     try {
       setLoading(true);
-      const txn_reference = await initializeTransaction();
-      const { data: conversionData } = await getConversion({
-        amount,
-        from: currencySymbol,
-      });
+      const [txn_reference, { data: conversionData }] = await Promise.all([
+        initializeTransaction(),
+        getConversion({
+          amount,
+          from: currencySymbol,
+        }),
+      ]);
+      // const txn_reference =  await initializeTransaction();
+      // const { data: conversionData } = await getConversion({
+      //   amount,
+      //   from: currencySymbol,
+      // });
       const conversion_id = conversionData?.data?._id;
 
       data.txn_reference = txn_reference;
@@ -93,6 +100,7 @@ function RequestPayment() {
         socket.emit("customer:join", {
           txn_reference: txRequestResponse?.data?.txn_reference,
         });
+        handleTxRef(txRequestResponse?.data?.txn_reference);
       }
     } catch (error) {
       const message = errorFormatter(error);

@@ -36,18 +36,6 @@ const SocketProvider = ({ children }: props) => {
     });
   }, []);
 
-  /** Socket Responses 
-   * 
-   * /'customer:transaction:update' {message: '', status:'STARTED'}
-//'customer:transaction:update' {message: '', status:'CANCELLED'}
-//'customer:transaction:update' {message: '', status:'COMPLETED'}
-//Acknowledge Transaction Updates by client
-//'customer:started:ack' {txn_reference}
-//'customer:cancelled:ack' {txn_reference}
-//'customer:completed:ack' {txn_reference}
-   * 
-  */
-
   useEffect(() => {
     socket.on("customer:joined", (data) => {
       console.log(data);
