@@ -7,8 +7,8 @@ type props = {
 function AddBank({ toggleModal }: props) {
   return (
     <div className="">
-      <h1 className="text-3xl mb-10">Hello,</h1>
-      <h3 className="text-2xl mb-3">
+      <h1 className="text-2xl mb-10">Hello,</h1>
+      <h3 className="text-xl mb-3">
         Add Bank <br /> Account
       </h3>
       <p className="font-light mb-4 dark:text-slate-300 text-slate-800">
@@ -19,7 +19,7 @@ function AddBank({ toggleModal }: props) {
         onClick={toggleModal}
       >
         <span>
-          <PlusIcon className="h-[2.3rem]  w-[2.3rem] dark:stroke-[#EDEDED] stroke-slate-800" />
+          <PlusIcon className="h-[2rem]  w-[2rem] dark:stroke-[#EDEDED] stroke-slate-800" />
         </span>
         <span>Add Bank</span>
       </button>

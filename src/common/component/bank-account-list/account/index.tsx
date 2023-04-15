@@ -14,9 +14,9 @@ export const Account = ({
   handleAccountDelete,
 }: props) => {
   return (
-    <div className="bg-[#D9D9D9]  dark:bg-opacity-[0.12] w-full rounded-md p-4 px-8 justify-between flex  text-xs min-h-[5.2rem] relative">
+    <div className="bg-[#D9D9D9]  dark:bg-opacity-[0.12] w-full rounded-md p-4 pr-8 pl-4 justify-between flex  items-center text-xs min-h-[5.2rem] relative">
       <div className="">
-        <h4 className="text-sm mb-1 font-medium">{accountName}</h4>
+        <h4 className="text-xs mb-1 w-44 font-medium ">{accountName}</h4>
         <p>{bank}</p>
       </div>
       <div className="">

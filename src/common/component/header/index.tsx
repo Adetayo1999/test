@@ -10,11 +10,11 @@ export const Header = () => {
     <>
       <header className="flex justify-between items-center p-6">
         <Link to="/" className="flex flex-col gap-y-1">
-          <LogoIcon className=" dark:fill-white fill-slate-800 h-[2.5rem] w-[2.6rem]" />
-          <h4 className="font-bold">InPay</h4>
+          <LogoIcon className=" dark:fill-white fill-slate-800 h-[2rem] w-[2.3rem]" />
+          <h4 className="font-bold text-sm">InPay</h4>
         </Link>
         <button
-          className="dark:text-slate-300 text-slate-800"
+          className="dark:text-slate-300 text-slate-800 text-sm"
           onClick={() => setModal((prev) => !prev)}
         >
           Get Instance Card

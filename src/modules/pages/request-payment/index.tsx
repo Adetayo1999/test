@@ -82,11 +82,6 @@ function RequestPayment() {
           from: currencySymbol,
         }),
       ]);
-      // const txn_reference =  await initializeTransaction();
-      // const { data: conversionData } = await getConversion({
-      //   amount,
-      //   from: currencySymbol,
-      // });
       const conversion_id = conversionData?.data?._id;
 
       data.txn_reference = txn_reference;
@@ -116,7 +111,7 @@ function RequestPayment() {
   }
 
   return (
-    <div className="">
+    <div className="min-h-screen">
       <div className="mb-8">
         <Link to="/" className="flex gap-x-2 items-center w-fit text-sm">
           <span>
@@ -128,7 +123,7 @@ function RequestPayment() {
       <div className="">
         <div className="mb-6">
           <h2 className="text-xl mb-1">Request Payment</h2>
-          <p className="text-sm dark:text-slate-300 mb-1 text-slate-800">
+          <p className="text-xs dark:text-slate-300 mb-1 text-slate-800">
             Your payment will arrive in 10 minutes
           </p>
         </div>
@@ -137,7 +132,7 @@ function RequestPayment() {
           <div className="">
             <label
               htmlFor="amount"
-              className=" dark:text-slate-300 mb-2 block text-slate-800"
+              className=" dark:text-slate-300 mb-2 block text-slate-800 text-sm"
             >
               Enter Amount
             </label>
@@ -145,7 +140,7 @@ function RequestPayment() {
               <select
                 name=""
                 id=""
-                className="absolute w-fit top-[50%] left-3 h-[80%] -translate-y-[50%] dark:text-white text-slate-800 dark:bg-black  bg-white outline-none"
+                className="absolute w-fit top-[50%] left-3 h-[80%] -translate-y-[50%] dark:text-white text-slate-800 dark:bg-black  bg-white outline-none text-sm"
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
               >
@@ -162,7 +157,7 @@ function RequestPayment() {
                 type="number"
                 name=""
                 id=""
-                className="w-full p-2.5 placeholder:text-gray-500 dark:bg-black  bg-white border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 pl-28"
+                className="w-full p-2.5 placeholder:text-gray-500 dark:bg-black  bg-white border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 pl-28 text-sm"
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
@@ -172,7 +167,7 @@ function RequestPayment() {
           <div className="">
             <label
               htmlFor="account"
-              className=" dark:text-slate-300 mb-2 block text-slate-800"
+              className=" dark:text-slate-300 mb-2 block text-slate-800 text-sm"
             >
               Bank Account
             </label>
@@ -198,7 +193,7 @@ function RequestPayment() {
               )}
             </CustomSelect>
 
-            <p className="mt-2 text-sm text-[#EDEDED]">
+            <p className="mt-2 text-xs text-[#EDEDED]">
               Haven&apos;t added Bank details?{" "}
               <Link className="font-bold" to="/">
                 Click here

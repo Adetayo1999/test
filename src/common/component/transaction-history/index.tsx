@@ -25,18 +25,18 @@ function TransactionHistory({ toggleModal }: props) {
 
   return (
     <div className="">
-      <div className="flex justify-between items-center mb-9">
+      <div className="flex flex-col gap-y-5 mb-9">
         <div className="">
-          <p className="dark:text-slate-300 mb-1 text-slate-800 text-sm">
+          <p className="dark:text-slate-300 mb-1 text-slate-800 text-xs">
             Total Received
           </p>
-          <h3 className="text-2xl">
+          <h3 className="text-xl">
             {currencyConverter("en-NG", "NGN", totalReceived)}
           </h3>
         </div>
-        <div className="flex gap-x-5">
+        <div className="flex justify-between">
           <button
-            className="flex items-center justify-center gap-x-2 bg-white   text-slate-800  rounded-sm px-3 py-1 text-sm font-semibold"
+            className="flex items-center justify-center gap-x-2 bg-white   text-slate-800 text-xs rounded-sm px-3 py-1  font-semibold"
             onClick={goToRequestPayment}
           >
             Request Payment
@@ -46,7 +46,7 @@ function TransactionHistory({ toggleModal }: props) {
             onClick={toggleModal}
           >
             <span>
-              <RxPlusCircled className="h-[2rem]  w-[2rem] dark:text-[#EDEDED] text-slate-800" />
+              <RxPlusCircled className="h-[1.5rem]  w-[1.5rem] dark:text-[#EDEDED] text-slate-800" />
             </span>
             <span className="text-xs"> Add bank </span>
           </button>
@@ -59,8 +59,8 @@ function TransactionHistory({ toggleModal }: props) {
             onClick={() => setActive("account")}
             className={` transition duration-200 ${
               active === "account"
-                ? "text-lg"
-                : "text-sm dark:text-slate-300  text-slate-800  "
+                ? "text-base"
+                : "text-xs dark:text-slate-300  text-slate-800  "
             }`}
           >
             Account
@@ -69,8 +69,8 @@ function TransactionHistory({ toggleModal }: props) {
             onClick={() => setActive("history")}
             className={`transition duration-200 ${
               active === "history"
-                ? "text-lg"
-                : "text-sm dark:text-slate-300  text-slate-800  "
+                ? "text-base"
+                : "text-xs dark:text-slate-300  text-slate-800  "
             }`}
           >
             History

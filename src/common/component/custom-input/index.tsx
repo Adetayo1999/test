@@ -37,7 +37,7 @@ export const CustomInput = ({
         defaultValue={defaultValue}
         name={name}
         onChange={onChange}
-        className={`w-full p-2.5 placeholder:text-gray-500  border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 ${
+        className={`w-full p-2.5 text-sm placeholder:text-gray-500  border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 ${
           isDark ? "text-white bg-black" : "text-black"
         } `}
         placeholder={placeholder}

@@ -18,7 +18,7 @@ export const CustomButton = ({
       onClick={clickHandler}
       className={`w-full p-2.5  ${
         loading && "cursor-not-allowed"
-      }  rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 font-bold ${
+      }  rounded-md shadow-sm outline-none text-sm appearance-none focus:border-indigo-600 font-bold ${
         !isDark ? "bg-white text-black" : "bg-black text-white"
       }`}
     >

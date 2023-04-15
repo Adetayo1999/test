@@ -114,7 +114,7 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
   return (
     <Modal isOpen={isOpen} toggleOpen={toggleOpen}>
       <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col items-center gap-y-2 mb-5">
+        <div className="flex flex-col items-center gap-y-2 mb-3">
           <div className="w-[3rem] h-[3rem] rounded-full bg-black flex justify-center items-center mb-2">
             <HiArrowUpRight className="text-white" fontSize={22} />
           </div>
@@ -123,7 +123,7 @@ export const AddBankModal = ({ isOpen, toggleOpen }: ModalProps) => {
 
         <div className="">
           <div className="mb-5">
-            <p className="text-[#525869]">
+            <p className="text-[#525869] text-sm text-center">
               Add the account where all your payment will be paid into.
             </p>
           </div>

@@ -12,7 +12,7 @@ export const CustomSelect = ({ children, onChange, isDark, value }: props) => {
     <div className="relative w-full">
       <select
         value={value}
-        className={`w-full p-2.5 text-black  border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 placeholder:text-[#686868] cursor-pointer ${
+        className={`w-full text-sm p-2.5 text-black  border dark:border-[#9DA3B1] rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600 placeholder:text-[#686868] cursor-pointer ${
           isDark ? "text-white bg-black" : "text-black"
         }`}
         onChange={onChange}
