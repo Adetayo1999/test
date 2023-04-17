@@ -14,7 +14,7 @@ export const GetNFCCardModal = ({ isOpen, toggleOpen }: ModalProps) => {
           <h3 className="text-[#0B112F] font-bold text-xl mb-1">
             Get your own NFC Card
           </h3>
-          <p className="text-[#525869] text-sm">
+          <p className="text-[#525869] text-xs w-[80%] text-center m-auto">
             To apply for Instance NFC card follow instruction below.
           </p>
         </div>
@@ -28,14 +28,14 @@ export const GetNFCCardModal = ({ isOpen, toggleOpen }: ModalProps) => {
                 <span className="h-[1.875rem] w-[1.875rem] rounded-full bg-[#0B112F] text-white flex justify-center items-center text-sm">
                   1
                 </span>
-                <p className="">Download Instance App</p>
+                <p className="text-sm">Download Instance App</p>
               </div>
-              <div className="flex gap-x-5">
+              <div className="flex gap-x-5 pl-4">
                 <Link to="/">
-                  <img src={appleStore} alt="Apple Store" />
+                  <img src={appleStore} alt="Apple Store" className="w-28" />
                 </Link>
                 <Link to="/">
-                  <img src={googleStore} alt="Google Store" />
+                  <img src={googleStore} alt="Google Store" className="w-28" />
                 </Link>
               </div>
             </li>
@@ -43,13 +43,13 @@ export const GetNFCCardModal = ({ isOpen, toggleOpen }: ModalProps) => {
               <span className="h-[1.875rem] w-[1.875rem] rounded-full bg-[#0B112F] text-white flex justify-center items-center text-sm">
                 2
               </span>
-              <p>Sign up in 2 minutes</p>
+              <p className="text-sm">Sign up in 2 minutes</p>
             </li>
             <li className="flex items-center gap-x-4">
               <span className="h-[1.875rem] w-[1.875rem] rounded-full bg-[#0B112F] text-white flex justify-center items-center text-sm">
                 3
               </span>
-              <p>Order for instance NFC card</p>
+              <p className="text-sm">Order for instance NFC card</p>
             </li>
           </ul>
 
@@ -61,7 +61,7 @@ export const GetNFCCardModal = ({ isOpen, toggleOpen }: ModalProps) => {
               <span className="p-1 bg-[#D9D9D9]">
                 <HiArrowUpRight className="text-black" />
               </span>
-              <span className="">www.instance.finance/shop-nfc</span>
+              <span className="text-sm">www.instance.finance/shop-nfc</span>
             </Link>
           </div>
         </div>

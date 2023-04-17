@@ -23,20 +23,20 @@ export const NFCSlider = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       {counter === 0 && (
-        <div className=" transition duration-[1s]  w-[20rem] h-[12rem] overflow-hidden rounded-md mb-3">
+        <div className=" transition duration-[1s]  w-[20rem] h-[10rem] overflow-hidden rounded-md mb-3">
           <img
             src={NFC_CARDS[0]}
             alt="INPAY NFC CARD"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
       )}
       {counter === 1 && (
-        <div className="transition duration-[1s]  w-[20rem] h-[12rem] overflow-hidden rounded-md mb-3">
+        <div className="transition duration-[1s]  w-[20rem] h-[10rem] overflow-hidden rounded-md mb-3">
           <img
             src={NFC_CARDS[1]}
             alt="INPAY NFC CARD"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
       )}
