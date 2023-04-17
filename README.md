@@ -1,2 +1,1 @@
 # NfcCheckout
-mobile only
