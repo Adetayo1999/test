@@ -17,6 +17,7 @@ import service from "@common/service/requests";
 import { customToast } from "src/utils/custom-toast";
 import { PATHS } from "@common/routes/paths";
 import { useSocket } from "@common/context/socket-context";
+import { PaymentProcessingModal } from "@common/component/modals/payment-procesing";
 
 function RequestPayment() {
   const [amount, setAmount] = useState("");
@@ -24,8 +25,9 @@ function RequestPayment() {
   const [description, setDescription] = useState("");
   const [accountDetails, setAccountDetails] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isProcessingModalOpen, setIsProcessingModalOpen] = useState(false);
 
-  const { socket, socketConnected, handleTxRef } = useSocket();
+  const { socket, socketConnected, handleTxRef, txn_status } = useSocket();
 
   const {
     state: {
@@ -39,6 +41,12 @@ function RequestPayment() {
       service.getFiats(dispatch);
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (fiats.length && !currency) {
+      setCurrency(`${fiats[0]._id}%${fiats[0].country_currency}`);
+    }
+  }, [currency, fiats]);
 
   const initializeTransaction = useCallback(async () => {
     const { data } = await initializeNFCTransaction({
@@ -99,14 +107,25 @@ function RequestPayment() {
       }
     } catch (error) {
       const message = errorFormatter(error);
-      customToast(message, "error");
+      customToast(message.replace("_", " "), "error");
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (!getNFCToken()) {
+      customToast("Error: Restart the connection Process", "error");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (txn_status) {
+      setIsProcessingModalOpen(true);
+    }
+  }, [txn_status]);
+
   if (!getNFCToken()) {
-    customToast("Error: Restart the connection Process", "error");
     return <Navigate to={PATHS.add_bank} />;
   }
 
@@ -212,7 +231,10 @@ function RequestPayment() {
         </form>
       </div>
 
-      {/* <PaymentProcessingModal isOpen toggleOpen={() => {}} /> */}
+      <PaymentProcessingModal
+        isOpen={isProcessingModalOpen}
+        toggleOpen={() => setIsProcessingModalOpen((prev) => !prev)}
+      />
     </div>
   );
 }

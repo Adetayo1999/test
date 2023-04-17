@@ -15,10 +15,13 @@ export const Modal = ({ children, isOpen, toggleOpen }: ModalProps) => {
 
   return (
     <div
-      className={`modal z-50 ${isOpen ? "modal__active" : ""} `}
+      className={`modal z-50 ${isOpen ? "modal__active" : ""}  `}
       onClick={toggleOpen}
     >
-      <div className="modal__container" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal__container pb-20"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="mb-4">
           <button
             className="w-[5.625rem] h-[0.5rem] bg-[#9DA3B1] rounded-[999px] cursor-pointer"
