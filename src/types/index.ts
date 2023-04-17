@@ -62,10 +62,18 @@ export interface ContextType {
   dispatch: DispatchType;
 }
 
+export type TXN_STATUS_TYPE =
+  | "customer_joined"
+  | "customer_cancelled"
+  | "customer_started"
+  | "customer__completed"
+  | "";
+
 export interface SocketContextType {
   socketConnected: boolean;
   socket: Socket;
   handleTxRef(txRef: string): void;
+  txn_status: TXN_STATUS_TYPE;
 }
 
 export interface RequestNFCTransactionType {

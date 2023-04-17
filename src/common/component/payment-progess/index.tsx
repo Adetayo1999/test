@@ -1,20 +1,56 @@
+import { useSocket } from "@common/context/socket-context";
 import { FiMoreHorizontal } from "react-icons/fi";
 
 export const PaymentProgess = () => {
+  const { txn_status } = useSocket();
+
   return (
     <ol className="flex items-center w-full  justify-center">
-      <li className="flex w-full items-center  after:content-[''] after:w-full after:h-[0.1rem] after:border-b after:border-[#44CF95] after:border-2 after:inline-block dark:after:border-[#44CF95]">
-        <span className="flex items-center justify-center w-8 h-8  rounded-full  bg-[#44CF95] shrink-0">
-          <FiMoreHorizontal fontSize={20} className="text-black" />
+      <li
+        className={`flex w-full items-center  after:content-[''] after:w-full after:h-[0.1rem] after:border-b  after:border-2 after:inline-block ${
+          txn_status ? "after:border-[#44CF95]" : "after:border-black"
+        } `}
+      >
+        <span
+          className={`flex items-center justify-center w-8 h-8  rounded-full  ${
+            txn_status ? "bg-[#44CF95]" : "bg-[#0B112F]"
+          }  shrink-0`}
+        >
+          <FiMoreHorizontal
+            fontSize={20}
+            className={` ${txn_status ? "bg-[#44CF95]" : "bg-[#0B112F]"} `}
+          />
         </span>
       </li>
-      <li className="flex w-full items-center text-white after:content-[''] after:w-full after:h-[0.1rem] after:border-b after:border-black after:border-2 after:inline-block dark:after:border-black">
-        <span className="flex items-center justify-center w-8 h-8 bg-[#0B112F] rounded-full  dark:bg-[#0B112F] shrink-0">
+      <li
+        className={`flex w-full items-center text-white after:content-[''] after:w-full after:h-[0.1rem] after:border-b  after:border-2 after:inline-block 
+       ${
+         txn_status && txn_status !== "customer_joined"
+           ? "after:border-[#44CF95]"
+           : "after:border-black"
+       }
+      `}
+      >
+        <span
+          className={`flex items-center justify-center w-8 h-8 ${
+            txn_status && txn_status !== "customer_joined"
+              ? "bg-[#44CF95]"
+              : "bg-[#0B112F]"
+          } rounded-full   shrink-0`}
+        >
           1
         </span>
       </li>
       <li className="flex items-center">
-        <span className="flex items-center justify-center w-8 h-8 bg-[#0B112F] rounded-full  dark:bg-[#0B112F] shrink-0">
+        <span
+          className={`flex items-center justify-center w-8 h-8 ${
+            txn_status === "customer__completed"
+              ? "bg-[#44CF95]"
+              : txn_status === "customer_cancelled"
+              ? "bg-red-500"
+              : "bg-[#0B112F]"
+          } rounded-full   shrink-0`}
+        >
           <svg
             aria-hidden="true"
             className="w-5 h-5 text-white  "
