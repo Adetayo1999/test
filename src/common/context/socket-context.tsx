@@ -14,7 +14,7 @@ const SocketProvider = ({ children }: props) => {
   const [txn_status, setTxnStatus] = useState<TXN_STATUS_TYPE>("");
   const [socketConnected, setSocketConnected] = useState(false);
   const socketRef = useRef({
-    socket: io(`${import.meta.env.VITE_AUTH_BASE_URL!}/nfc`, {
+    socket: io(`${import.meta.env.VITE_SOCKET_BASE_URL!}/nfc`, {
       transports: ["websocket"],
     }),
   });
