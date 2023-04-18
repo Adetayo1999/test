@@ -1,9 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { CustomButton } from "@common/component/custom-button";
 import { CustomSelect } from "@common/component/custom-select";
 import { CustomTextArea } from "@common/component/custom-textarea";
-import { getBankAccounts, getNFCToken } from "@common/service/storage";
+import {
+  getBankAccounts,
+  getNFCToken,
+  removeNFCToken,
+} from "@common/service/storage";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import {
@@ -26,6 +30,7 @@ function RequestPayment() {
   const [accountDetails, setAccountDetails] = useState("");
   const [loading, setLoading] = useState(false);
   const [isProcessingModalOpen, setIsProcessingModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { socket, socketConnected, handleTxRef, txn_status } = useSocket();
 
@@ -108,6 +113,11 @@ function RequestPayment() {
     } catch (error) {
       const message = errorFormatter(error);
       customToast(message.replace("_", " "), "error");
+
+      if (message === "NFC card not found") {
+        removeNFCToken();
+        navigate("/");
+      }
     } finally {
       setLoading(false);
     }
