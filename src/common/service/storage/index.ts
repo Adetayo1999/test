@@ -93,3 +93,7 @@ export const getNFCToken = () => {
 export const setNFCToken = (token: string) => {
   sessionStorage.setItem(STORAGE_KEYS.CLIENT_NFC_TOKEN, token);
 };
+
+export const removeNFCToken = () => {
+  sessionStorage.removeItem(STORAGE_KEYS.CLIENT_NFC_TOKEN);
+};
