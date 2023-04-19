@@ -6,6 +6,10 @@ const loadModules = (path: string) =>
 
 export const routes = [
   {
+    path: PATHS.home,
+    Component: loadModules("add-bank/index"),
+  },
+  {
     path: PATHS.add_bank,
     Component: loadModules("add-bank/index"),
   },
