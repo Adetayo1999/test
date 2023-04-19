@@ -1,6 +1,5 @@
 .modal {
   height: 100vh;
-  height: -webkit-fill-available;
   background-color: rgba(0, 0, 0, 0.23);
   display: flex;
   pointer-events: none;
@@ -12,6 +11,7 @@
   top: 0;
   left: 0;
   width: 100%;
+  overflow-y: scroll;
 }
 
 .modal__container {
@@ -42,4 +42,11 @@
 
 .modal.modal__active .modal__container {
   transform: translateY(0);
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+  .modal {
+    height: -webkit-fill-available;
+  }
 }
