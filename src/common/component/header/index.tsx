@@ -10,7 +10,7 @@ export const Header = () => {
     <>
       <header className="flex justify-between items-center p-6">
         <Link to="/" className="flex flex-col gap-y-1">
-          <LogoIcon className=" dark:fill-white fill-slate-800 h-[2rem] w-[2.3rem]" />
+          <LogoIcon className=" dark:fill-white fill-slate-800 h-[1.5rem] w-[2rem]" />
           <h4 className="font-bold text-sm">InPay</h4>
         </Link>
         <button
