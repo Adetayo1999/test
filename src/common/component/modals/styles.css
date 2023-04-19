@@ -1,5 +1,6 @@
 .modal {
   height: 100vh;
+  height: -webkit-fill-available;
   background-color: rgba(0, 0, 0, 0.23);
   display: flex;
   pointer-events: none;
